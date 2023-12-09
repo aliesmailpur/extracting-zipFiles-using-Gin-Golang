@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Zip File Uploader</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+    .container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    input[type="file"] {
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button[type="submit"] {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button[type="submit"]:hover {
+      background-color: #45a049;
+    }
+    #status {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+    }
+    #message {
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Upload a ZIP File</h2>
+    <form id="uploadForm" enctype="multipart/form-data">
+      <input type="file" name="file">
+      <button type="submit">Upload</button>
+    </form>
+    <div id="status">
+      <h3>Status:</h3>
+      <p id="message"></p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("uploadForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      var formData = new FormData(this);
+      
+      fetch("/upload", {
+        method: "POST",
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById("status").style.display = "block";
+        document.getElementById("message").innerText = data.message;
+      })
+      .catch(error => console.error("Error:", error));
+    });
+  </script>
+</body>
+</html>
